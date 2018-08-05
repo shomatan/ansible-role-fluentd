@@ -1,0 +1,4 @@
+---
+
+- name: Add GPG key
+  command: rpm --import https://packages.treasuredata.com/GPG-KEY-td-agent
