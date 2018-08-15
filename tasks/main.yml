@@ -1,4 +1,13 @@
 ---
 
 - name: Add GPG key
-  command: rpm --import https://packages.treasuredata.com/GPG-KEY-td-agent
+  rpm_key: 
+    key: https://packages.treasuredata.com/GPG-KEY-td-agent
+
+- name: Add official repository
+  yum_repository:
+    name: TreasureData
+    description: TreasureData YUM repo
+    file: treasure_data
+    baseurl: http://packages.treasuredata.com/2/redhat/$releasever/$basearch
+    gpgcheck: yes
