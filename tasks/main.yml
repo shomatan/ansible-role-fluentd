@@ -18,6 +18,14 @@
     enablerepo: TreasureData
     update_cache: yes  
 
+- name: Install gcc and libcurl for compiling plugins
+  yum: 
+    name: "{{ item }}" 
+  with_items:
+    - gcc
+    - libcurl
+    - libcurl-devel
+
 - name: Ensure td-agent is started and enabled to start at boot.
   service: name=td-agent state=started enabled=yes
 
@@ -27,3 +35,13 @@
     owner: td-agent
     group: td-agent
     state: directory
+
+- name: install plugins, if specified
+  gem:
+      name: "{{ item }}"
+      executable: /opt/td-agent/embedded/bin/fluent-gem
+      state: latest
+      user_install: no
+  with_items: "{{ fluentd_plugins }}"
+  notify:
+    - restart td-agent

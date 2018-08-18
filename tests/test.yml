@@ -2,3 +2,6 @@
 - hosts: localhost
   roles:
     - fluentd
+  vars:
+    fluentd_plugins:
+      - fluent-plugin-elasticsearch
