@@ -1,7 +1,7 @@
 
 DOCKER_IMAGE_NAME=fluentd-test-image
 DOCKER_CONTAINER_NAME=fluentd-test
-#PLAYBOOK_CMD=
+PLAYBOOK_CMD=ansible-playbook fluentd/tests/test.yml -i fluentd/tests/inventory
 
 .PHONY: build
 build:
@@ -16,14 +16,16 @@ run-container: build
 
 .PHONY: check
 check: run-container
-	docker exec -it $(DOCKER_CONTAINER_NAME) \
-		ansible-playbook fluentd/tests/test.yml -i fluentd/tests/inventory --syntax-check
+	docker exec -it $(DOCKER_CONTAINER_NAME) $(PLAYBOOK_CMD) --syntax-check
 
 .PHONY: test
 test: check
-	docker exec -it $(DOCKER_CONTAINER_NAME) \
-		ansible-playbook fluentd/tests/test.yml -i fluentd/tests/inventory
+	docker exec -it $(DOCKER_CONTAINER_NAME) $(PLAYBOOK_CMD)
 
 .PHONY: clean
 clean:
 	-@docker rm -f $(DOCKER_CONTAINER_NAME)
+
+.PHONY: destroy
+destroy: clean
+	-@docker rmi -f $(DOCKER_IMAGE_NAME)
