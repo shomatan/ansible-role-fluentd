@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: fluentd
   author: Shoma Nishitateno
   description: Installs Fluentd which is an open source data collector
   license: "license MIT"
