@@ -8,6 +8,22 @@
   yum_repository:
     name: TreasureData
     description: TreasureData YUM repo
-    file: treasure_data
-    baseurl: http://packages.treasuredata.com/2/redhat/$releasever/$basearch
+    file: td
+    baseurl: http://packages.treasuredata.com/3/redhat/$releasever/$basearch
     gpgcheck: yes
+
+- name: Install td-agent
+  yum: 
+    name: "td-agent-{{ fluentd_version }}"
+    enablerepo: TreasureData
+    update_cache: yes  
+
+- name: Ensure td-agent is started and enabled to start at boot.
+  service: name=td-agent state=started enabled=yes
+
+- name: Create dicrectory for td-agent
+  file:
+    path: /etc/td-agent/conf.d
+    owner: td-agent
+    group: td-agent
+    state: directory
